@@ -1,4 +1,4 @@
-#Install Git for Windows
+# Install Git for Windows
 1. **Check if Git is installed**. Open PowerShell in Administrator mode and run:
 ```
 git --version

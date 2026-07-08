@@ -3,7 +3,7 @@
 ## Daily workflow
 
 1. Collect new material into `sources/`.
-2. Ingest one source at a time.
+2. Ingest one source at a time. Ask claude "I have just added new files in the raw folder. Please read it and update the wiki."
 3. Review the generated pages in `wiki/`.
 4. Ask cross-source questions.
 5. Save valuable answers back into the vault.

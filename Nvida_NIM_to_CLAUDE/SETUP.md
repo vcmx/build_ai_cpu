@@ -1,6 +1,5 @@
 # Setup
-
-## Path A: Follow the video workflow
+(the orginal repo is at https://github.com/Alishahryar1/free-claude-code)
 
 ### 1. Install CLAUDE
 
@@ -12,7 +11,7 @@ irm https://claude.ai/install.ps1 | iex
 
 ### 2. Install the bridge
 
-To host our custom backend proxy and process the data payloads going back and forth, we need a fast, modern environment setup. For this project, we will use uv the blazing-fast Python package and environment installer written in Rust alongside Python 3.14.
+To host our custom backend proxy and process the data payloads going back and forth, we need a fast, modern environment setup. For this project, we will use uv the blazing-fast Python package and environment installer written in Rust alongside Python 3.14. The following downloads the necessary bridge server files.
 
 
 ```bash
@@ -45,7 +44,6 @@ As soon as the engine successfully boots up, look closely at your PowerShell con
 Server URL: http://127.0.0.1:8082
 Admin UI: http://127.0.0.1:8082/admin
 ```
-If all is working, close it first with Ctrl+C.
 
 ### 5. Create an NVIDIA NIM API key
 

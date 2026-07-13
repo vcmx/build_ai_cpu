@@ -1,69 +1,70 @@
-# CLAUDE.md
+CLAUDEmd
 
-Purpose: maintain this Obsidian-based LLM Wiki as a persistent, interlinked markdown knowledge base.
+## LLM Wiki
+A personal knowledge base maintained by Claude Code. Based on Andrej Karpathy's LLM Wiki pattern.
+## Purpose
+This wiki is a structured, interlinked knowledge base for archiving the manuals, procedures, and specifications documents related to maintaining a system.
 
-## Architecture
+Claude maintains the wiki. The human curates sources, asks questions, and guides the analysis.
 
-This vault has three layers:
-
-1. `sources/` = raw source documents; read-only.
-2. `wiki/` = generated markdown wiki; editable by the agent.
-3. `schema/` = supporting rules, templates, and conventions. [page:1]
-
-## Operating principles
-
-- Never modify original raw source files unless the user explicitly asks.
-- Prefer incremental updates over full rewrites.
-- Preserve existing valid wiki-links.
-- Keep pages concise, factual, and cross-linked.
-- When new information contradicts older pages, preserve the contradiction with attribution instead of silently overwriting it. [page:1]
-
-## Required files
-
-- `wiki/index.md`: master catalog of pages, grouped by type, with one-line summaries. Karpathy describes the index as the content-oriented navigation layer the LLM should read first when answering queries. [page:1]
-- `wiki/log.md`: append-only operation log for ingest, query, and lint actions. Karpathy describes the log as chronological and useful for recent-history inspection. [page:1]
-
+## Folder structure
+```
+raw/ -- source documents (immutable -- never modify these)
+wiki/ -- markdown pages maintained by Claude
+wiki/index.md -- table of contents for the entire wiki
+```
 ## Ingest workflow
+When the user adds a new source to `raw/` and asks you to ingest it:
+1. Read the full source document
+2. Discuss key takeaways with the user before writing anything
+3. Create a summary page in `wiki/` named after the source
+4. Create or update concept pages for each major idea or entity
+5. Add wiki-links ([[page-name]]) to connect related pages
+6. Update `wiki/index.md` with new pages and one-line descriptions
+7. Append an entry to `wiki/log.md` with the date, source name, and what changed
 
-When asked to ingest a source:
+A single source may touch 10-15 wiki pages. That is normal.
+## Page format
+Every wiki page should follow this structure:
+```markdown
+# Page Title
+**Summary**: One to two sentences describing this page.
+**Sources**: List of raw source files this page draws from.
+**Last updated**: Date of most recent update.
+---
+Main content goes here. Use clear headings and short paragraphs.
+Link to related concepts using [[wiki-links]] throughout the text.
+## Related pages
+- [[related-concept-1]]
+- [[related-concept-2]]
+```
+## Citation rules
+- Every factual claim should reference its source file
+- Use the format (source: filename.pdf) after the claim
+- If two sources disagree, note the contradiction explicitly
+- If a claim has no source, mark it as needing verification
+## Question answering
+When the user asks a question:
+1. Read `wiki/index.md` first to find relevant pages
+2. Read those pages and synthesize an answer
+3. Cite specific wiki pages in your response
+4. If the answer is not in the wiki, say so clearly
+5. If the answer is valuable, offer to save it as a new wiki page
 
-1. Read one file from `sources/`.
-2. Create or update a source summary page in `wiki/sources/`.
-3. Create or update related entity pages in `wiki/entities/`.
-4. Create or update related concept pages in `wiki/concepts/`.
-5. Add or improve `[[wiki-links]]` between affected pages.
-6. Update `wiki/index.md`.
-7. Append an ingest record to `wiki/log.md`. [page:1]
+Good answers should be filed back into the wiki so they compound over time.
 
-A single source may affect many pages, and Karpathy notes that 10 to 15 touched pages is normal. [page:1]
+## Lint
+When the user asks you to lint or audit the wiki:
+- Check for contradictions between pages
+- Find orphan pages (no inbound links from other pages)
+- Identify concepts mentioned in pages that lack their own page
+- Flag claims that may be outdated based on newer sources
+- Check that all pages follow the page format above
+- Report findings as a numbered list with suggested fixes
 
-## Query workflow
-
-When asked a question:
-
-1. Read `wiki/index.md` first.
-2. Open only the most relevant pages.
-3. Synthesize the answer from wiki content.
-4. If the answer creates durable value, save it as a new synthesis page.
-5. Append a query record to `wiki/log.md`. [page:1]
-
-## Lint workflow
-
-When asked to lint:
-
-- detect contradictions,
-- stale claims,
-- orphan pages,
-- dead links,
-- missing cross-references,
-- duplicates,
-- missing concept/entity pages for frequently mentioned topics. [page:1][page:2]
-
-Apply safe fixes where possible and record the lint pass in `wiki/log.md`.
-
-## Style conventions
-
-- Prefer markdown headings over long prose blocks.
-- Use short sections such as Summary, Key Points, Related Concepts, Related Entities, Sources, and Open Questions.
-- Use wiki-links generously, but only when the target page is genuinely relevant.
-- Add YAML frontmatter when useful for tags, aliases, dates, or source references. Karpathy notes Dataview becomes useful when the LLM adds frontmatter consistently. [page:1]
+## Rules
+- Never modify anything in the `raw/` folder
+- Always update `wiki/index.md` and `wiki/log.md` after changes
+- Keep page names lowercase with hyphens (e.g. `machine-learning.md`)
+- Write in clear, plain language
+- When uncertain about how to categorize something, ask the user
